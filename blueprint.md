@@ -1,109 +1,24 @@
+# Anime App Blueprint
 
-# Kamanime Flutter App Blueprint
+## Overview
 
-## 1. Overview
+This document outlines the blueprint for a Flutter application that allows users to browse and watch anime. The application fetches data from the AniList API and provides a simple, intuitive interface for users to discover and enjoy their favorite anime series.
 
-This document outlines the architecture, features, and implementation plan for the Kamanime Flutter App. The primary goal is to create a self-contained anime streaming application where all scraping and data extraction logic is embedded within the app itself, running locally on the user's device.
+## Features
 
-## 2. Core Features
+- **Trending Anime:** The main screen displays a list of currently trending anime, providing users with a quick overview of what's popular.
+- **Anime Details:** Users can tap on an anime to view more details, including a summary, cover image, and a list of available episodes.
+- **Episode Streaming:** Users can select an episode to watch it directly within the app.
+- **State Management:** The application uses `flutter_riverpod` for state management, ensuring a clean and scalable architecture.
 
-- **Local Backend:** The app will not rely on a remote server. All anime data will be scraped and parsed on the device.
-- **Multi-Provider Scraping:** A waterfall strategy will be implemented to fetch data from multiple sources:
-    1.  **HiAnime:** Primary source.
-    2.  **Gogoanime:** Fallback source.
-    3.  **AnimePahe:** Last resort.
-- **AniList Integration:** The home screen will feature trending anime fetched from the AniList API.
-- **Riverpod State Management:** The app will use `flutter_riverpod` for robust and scalable state management.
-- **High-Performance Video Player:** `media_kit` will be used for HLS/m3u8 video playback.
-- **Local Caching:** `Hive` will be used to cache anime information and user history for offline access and faster loading.
+## Current Task
 
-## 3. Project Structure
+**Implement Anime Details Screen**
 
-```
-.
-├── lib
-│   ├── core
-│   │   ├── api
-│   │   │   └── ani_list_api.dart
-│   │   ├── constants
-│   │   │   └── app_constants.dart
-│   │   └── utils
-│   │       └── app_utils.dart
-│   ├── data
-│   │   ├── datasources
-│   │   │   ├── local_data_source.dart
-│   │   │   └── remote_data_source.dart
-│   │   ├── models
-│   │   │   ├── anime.dart
-│   │   │   └── episode.dart
-│   │   └── repositories
-│   │       └── anime_repository.dart
-│   ├── presentation
-│   │   ├── providers
-│   │   │   ├── anime_provider.dart
-│   │   │   └── video_player_provider.dart
-│   │   ├── screens
-│   │   │   ├── home_screen.dart
-│   │   │   ├── search_screen.dart
-│   │   │   └── watch_screen.dart
-│   │   └── widgets
-│   │       ├── anime_card.dart
-│   │       ├── custom_app_bar.dart
-│   │       └── video_player.dart
-│   ├── services
-│   │   ├── extractors
-│   │   │   ├── hianime_extractor.dart
-│   │   │   ├── gogoanime_extractor.dart
-│   │   │   └── animepahe_extractor.dart
-│   │   └── internal_scraper.dart
-│   └── main.dart
-├── pubspec.yaml
-└── blueprint.md
-```
-
-## 4. Implementation Plan
-
-### Step 1: Project Setup
-
-- Initialize a new Flutter project.
-- Add the required dependencies to `pubspec.yaml`:
-    - `flutter_riverpod`
-    - `media_kit`
-    - `hive` and `hive_flutter`
-    - `dio` or `http` for network requests.
-    - `html` for parsing HTML.
-- Create the directory structure as outlined above.
-
-### Step 2: Porting the HiAnime Extractor
-
-- Analyze the provided JavaScript extractor logic for HiAnime.
-- Create an `HiAnimeExtractor` class in `lib/services/extractors/hianime_extractor.dart`.
-- Implement the following methods in pure Dart:
-    - `search(query)`: To search for anime.
-    - `getAnimeInfo(animeId)`: To fetch anime details, including episodes.
-    - `getEpisodeSources(episodeId)`: To extract the m3u8 video URLs.
-- Utilize the `http` or `dio` package for making network requests and the `html` package for parsing the scraped HTML.
-
-### Step 3: Building the `InternalScraper`
-
-- Create an `InternalScraper` class in `lib/services/internal_scraper.dart`.
-- This class will implement the waterfall strategy, attempting to fetch data from HiAnime first, then falling back to Gogoanime, and finally AnimePahe.
-
-### Step 4: UI and State Management
-
-- **Home Screen:**
-    - Use the `ani_list_api.dart` to fetch trending anime from AniList.
-    - Display the trending anime in a visually appealing list or grid using `AnimeCard` widgets.
-- **Search Screen:**
-    - Implement a search bar that uses the `InternalScraper` to search for anime across the supported providers.
-- **Watch Screen:**
-    - Integrate the `media_kit` video player.
-    - Implement a custom UI with controls for play/pause, quality switching, and subtitle selection.
-- **Providers:**
-    - Create Riverpod providers to manage the state for anime data, search results, and the video player.
-
-### Step 5: Caching
-
-- Integrate Hive to store anime data and watch history.
-- When fetching anime information, first check the Hive cache before making a network request.
+- **Goal:** Create a screen that displays detailed information about a selected anime, including its title, cover image, and a list of episodes.
+- **Steps:**
+  1.  **Create `anime_details_screen.dart`:** This file will contain the UI for the anime details screen.
+  2.  **Fetch Anime Details:** Implement the necessary logic to fetch detailed information for a specific anime from the AniList API.
+  3.  **Display Anime Details:** Render the fetched data on the screen, including the cover image, title, and a list of episodes.
+  4.  **Navigate to Watch Screen:** Allow users to tap on an episode to navigate to the `watch_screen.dart` and stream the selected episode.
 

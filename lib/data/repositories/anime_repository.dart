@@ -8,4 +8,9 @@ class AnimeRepository {
     final List<dynamic> animeData = await _dataSource.getTrendingAnime();
     return animeData.map((data) => Anime.fromJson(data)).toList();
   }
+
+  Future<Anime> getAnimeDetails(int animeId) async {
+    final Map<String, dynamic> animeData = await _dataSource.getAnimeDetails(animeId);
+    return Anime.fromJson(animeData);
+  }
 }

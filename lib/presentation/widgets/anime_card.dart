@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/data/models/anime_model.dart';
+import 'package:myapp/presentation/screens/anime_details_screen.dart';
 
 class AnimeCard extends StatelessWidget {
   final Anime anime;
@@ -8,24 +9,35 @@ class AnimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Expanded(
-            child: Image.network(
-              anime.coverImage,
-              fit: BoxFit.cover,
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AnimeDetailsScreen(animeId: anime.id),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              anime.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+        );
+      },
+      child: Card(
+        child: Column(
+          children: [
+            Expanded(
+              child: Image.network(
+                anime.coverImage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                anime.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
