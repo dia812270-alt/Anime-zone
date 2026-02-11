@@ -1,13 +1,16 @@
 class Episode {
+  final String id;
   final String title;
-  final String url;
 
-  Episode({required this.title, required this.url});
+  Episode({
+    required this.id,
+    required this.title,
+  });
 
-  factory Episode.fromMap(Map<String, dynamic> map) {
+  factory Episode.fromJson(Map<String, dynamic> json) {
     return Episode(
-      title: map['title'] ?? '',
-      url: map['url'] ?? '',
+      id: json['id'] as String,
+      title: json['title'] as String,
     );
   }
 }

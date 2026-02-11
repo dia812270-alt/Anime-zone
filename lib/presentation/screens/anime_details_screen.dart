@@ -4,12 +4,12 @@ import 'package:myapp/data/models/anime_model.dart';
 import 'package:myapp/data/repositories/anime_repository.dart';
 import 'package:myapp/presentation/screens/watch_screen.dart';
 
-final animeDetailsProvider = FutureProvider.autoDispose.family<Anime, int>((ref, animeId) {
+final animeDetailsProvider = FutureProvider.autoDispose.family<Anime, String>((ref, animeId) {
   return AnimeRepository().getAnimeDetails(animeId);
 });
 
 class AnimeDetailsScreen extends ConsumerWidget {
-  final int animeId;
+  final String animeId;
 
   const AnimeDetailsScreen({super.key, required this.animeId});
 
@@ -37,11 +37,12 @@ class AnimeDetailsScreen extends ConsumerWidget {
                     final episode = anime.episodes[index];
                     return ListTile(
                       title: Text(episode.title),
-                      onTap: () {
+                      onTap: () async {
+                        final episodeUrl = await AnimeRepository().getEpisodeStreamUrl(episode.id);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WatchScreen(episodeUrl: episode.url),
+                            builder: (context) => WatchScreen(episodeUrl: episodeUrl),
                           ),
                         );
                       },

@@ -1,7 +1,7 @@
 import 'package:myapp/data/models/episode_model.dart';
 
 class Anime {
-  final int id;
+  final String id;
   final String title;
   final String coverImage;
   final List<Episode> episodes;
@@ -14,19 +14,13 @@ class Anime {
   });
 
   factory Anime.fromJson(Map<String, dynamic> json) {
-    var episodes = <Episode>[];
-    if (json['episodes'] != null) {
-      episodes = List<Episode>.from(
-          json['episodes'].map((e) => Episode.fromMap(e)));
-    }
-
     return Anime(
-      id: json['id'],
-      title: json['title']['romaji'] ??
-          json['title']['english'] ??
-          json['title']['native'],
-      coverImage: json['coverImage']['large'],
-      episodes: episodes,
+      id: json['id'] as String,
+      title: json['title'] as String,
+      coverImage: json['coverImage'] as String,
+      episodes: (json['episodes'] as List<dynamic>? ?? [])
+          .map((e) => Episode.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
